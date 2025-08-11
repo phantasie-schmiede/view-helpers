@@ -28,12 +28,14 @@ class InArrayViewHelper extends AbstractViewHelper
         $this->registerArgument('strict', 'bool', 'apply strict comparison', false, true);
     }
 
-    public function render(): string
+    public function render(): bool|string
     {
         if (in_array($this->arguments['needle'], $this->arguments['haystack'], $this->arguments['strict'])) {
-            return $this->renderChildren();
+            $renderedChildren = trim($this->renderChildren());
+
+            return $renderedChildren ?: true;
         }
 
-        return '';
+        return false;
     }
 }
