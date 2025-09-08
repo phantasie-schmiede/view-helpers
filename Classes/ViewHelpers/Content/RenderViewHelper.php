@@ -112,7 +112,18 @@ class RenderViewHelper extends AbstractViewHelper
             return implode(',', $uidList);
         };
 
-        return CObjectViewHelper::renderStatic($arguments, $renderChildrenClosure, $renderingContext);
+        if (method_exists(CObjectViewHelper::class, 'renderStatic')) {
+            // TYPO3 v12.4
+            return CObjectViewHelper::renderStatic($arguments, $renderChildrenClosure, $renderingContext);
+        }
+
+        // TYPO3 v13.4
+        $cObjectViewHelper = GeneralUtility::makeInstance(CObjectViewHelper::class);
+        $cObjectViewHelper->setArguments($arguments);
+        $cObjectViewHelper->setRenderChildrenClosure($renderChildrenClosure);
+        $cObjectViewHelper->setRenderingContext($renderingContext);
+
+        return $cObjectViewHelper->render();
     }
 
     public function initializeArguments(): void
