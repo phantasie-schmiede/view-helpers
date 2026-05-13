@@ -12,6 +12,7 @@ namespace PSBits\ViewHelpers\ViewHelpers\Condition;
 
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use function in_array;
+use function is_string;
 
 /**
  * Class InArrayViewHelper
@@ -31,9 +32,9 @@ class InArrayViewHelper extends AbstractViewHelper
     public function render(): bool|string
     {
         if (in_array($this->arguments['needle'], $this->arguments['haystack'], $this->arguments['strict'])) {
-            $renderedChildren = trim($this->renderChildren());
+            $renderedChildren = $this->renderChildren();
 
-            return $renderedChildren ?: true;
+            return is_string($renderedChildren) ? trim($renderedChildren) : true;
         }
 
         return false;
