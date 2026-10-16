@@ -12,6 +12,10 @@
         }
     },
     "config": {
+        "allow-plugins": {
+            "typo3/class-alias-loader": true,
+            "typo3/cms-composer-installers": true
+        },
         "bin-dir": ".Build/bin",
         "sort-packages": true,
         "vendor-dir": ".Build/vendor"
@@ -19,7 +23,6 @@
     "description": "Collection of useful ViewHelpers",
     "extra": {
         "typo3/cms": {
-            "cms-package-dir": "{$vendor-dir}/typo3/cms",
             "extension-key": "view_helpers",
             "web-dir": ".Build/public"
         }
@@ -35,7 +38,8 @@
     "require": {
         "php": "^8.3",
         "psbits/foundation": "^3.0",
-        "typo3/cms-core": "^12.4 || ^13.4"
+        "typo3/cms-core": "^13.4",
+        "typo3/cms-fluid": "^13.4"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.95",
@@ -64,12 +68,6 @@
         "lint:yaml": "yamllint -c Build/Quality/.yamllint.yml Configuration",
         "post-install-cmd": [
             "cp Build/GitHooks/pre-commit .git/hooks/pre-commit"
-        ],
-        "prepare-release": [
-            "rm -rf .github",
-            "rm .editorconfig",
-            "rm .gitattributes",
-            "rm .gitignore"
         ],
         "validate:composer": "composer validate --no-check-publish"
     },

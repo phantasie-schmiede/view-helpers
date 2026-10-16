@@ -54,6 +54,8 @@ class RenderViewHelper extends AbstractViewHelper
 
     /**
      * Returns the rendered HTML (unescaped, no format-ViewHelper needed).
+     *
+     * @param array<string, mixed> $arguments
      */
     public static function renderStatic(
         array                     $arguments,
@@ -112,12 +114,6 @@ class RenderViewHelper extends AbstractViewHelper
             return implode(',', $uidList);
         };
 
-        if (method_exists(CObjectViewHelper::class, 'renderStatic')) {
-            // TYPO3 v12.4
-            return CObjectViewHelper::renderStatic($arguments, $renderChildrenClosure, $renderingContext);
-        }
-
-        // TYPO3 v13.4
         $cObjectViewHelper = GeneralUtility::makeInstance(CObjectViewHelper::class);
         $cObjectViewHelper->setArguments($arguments);
         $cObjectViewHelper->setRenderChildrenClosure($renderChildrenClosure);

@@ -24,6 +24,9 @@ class LoopViewHelper extends AbstractViewHelper
      */
     protected $escapeOutput = false;
 
+    /**
+     * @var array<string, mixed>
+     */
     private array $variableBackups;
 
     public function initializeArguments(): void
@@ -65,6 +68,9 @@ class LoopViewHelper extends AbstractViewHelper
         return $content;
     }
 
+    /**
+     * @param list<string> $variables
+     */
     private function backupVariables(array $variables): void
     {
         $templateVariableContainer = $this->renderingContext->getVariableProvider();
@@ -76,6 +82,9 @@ class LoopViewHelper extends AbstractViewHelper
         }
     }
 
+    /**
+     * @param list<string> $variables
+     */
     private function restoreVariables(array $variables): void
     {
         $templateVariableContainer = $this->renderingContext->getVariableProvider();

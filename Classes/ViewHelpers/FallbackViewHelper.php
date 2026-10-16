@@ -35,6 +35,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class FallbackViewHelper extends AbstractViewHelper
 {
+    /**
+     * @param array<string, mixed> $arguments
+     */
     public static function renderStatic(
         array                     $arguments,
         Closure                   $renderChildrenClosure,

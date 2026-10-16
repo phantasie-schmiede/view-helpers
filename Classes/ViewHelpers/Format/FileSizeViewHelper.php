@@ -26,6 +26,8 @@ class FileSizeViewHelper extends AbstractViewHelper
     /**
      * If argument size is not provided, the tag content will be used instead.
      *
+     * @param array<string, mixed> $arguments
+     *
      * @throws AspectNotFoundException
      */
     public static function renderStatic(
