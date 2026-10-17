@@ -10,10 +10,8 @@ declare(strict_types=1);
 
 namespace PSBits\ViewHelpers\ViewHelpers\Format;
 
-use Closure;
 use PSBits\Foundation\Utility\FileUtility;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -26,18 +24,13 @@ class FileSizeViewHelper extends AbstractViewHelper
     /**
      * If argument size is not provided, the tag content will be used instead.
      *
-     * @param array<string, mixed> $arguments
-     *
      * @throws AspectNotFoundException
      */
-    public static function renderStatic(
-        array                     $arguments,
-        Closure                   $renderChildrenClosure,
-        RenderingContextInterface $renderingContext,
-    ): string {
-        $size = $arguments['size'] ?? $renderChildrenClosure();
+    public function render(): string
+    {
+        $size = $this->arguments['size'] ?? $this->renderChildren();
 
-        return FileUtility::formatFileSize($size, $arguments['unit'], $arguments['decimals']);
+        return FileUtility::formatFileSize($size, $this->arguments['unit'], $this->arguments['decimals']);
     }
 
     public function initializeArguments(): void
@@ -45,12 +38,12 @@ class FileSizeViewHelper extends AbstractViewHelper
         parent::initializeArguments();
         $this->registerArgument(
             'decimals',
-            'integer',
+            'mixed',
             'number of decimals that will be shown in the formatted string',
             false,
             2
         );
-        $this->registerArgument('size', 'integer', 'file size in bytes');
-        $this->registerArgument('unit', 'string', 'enforces a specific unit');
+        $this->registerArgument('size', 'mixed', 'file size in bytes (or file name)');
+        $this->registerArgument('unit', 'mixed', 'enforces a specific unit');
     }
 }

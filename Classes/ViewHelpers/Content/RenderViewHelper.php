@@ -10,15 +10,14 @@ declare(strict_types=1);
 
 namespace PSBits\ViewHelpers\ViewHelpers\Content;
 
-use Closure;
 use RuntimeException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 use function is_array;
 use function is_int;
 use function is_string;
@@ -54,15 +53,10 @@ class RenderViewHelper extends AbstractViewHelper
 
     /**
      * Returns the rendered HTML (unescaped, no format-ViewHelper needed).
-     *
-     * @param array<string, mixed> $arguments
      */
-    public static function renderStatic(
-        array                     $arguments,
-        Closure                   $renderChildrenClosure,
-        RenderingContextInterface $renderingContext,
-    ): string {
-        $contentElements = $arguments['contentElements'] ?? $renderChildrenClosure();
+    public function render(): string
+    {
+        $contentElements = $this->arguments['contentElements'] ?? $this->renderChildren();
         $uidList = [];
 
         switch (true) {
@@ -106,18 +100,18 @@ class RenderViewHelper extends AbstractViewHelper
         }
 
         // Set keys to avoid PHP warnings in CObjectViewHelper.
-        $arguments['currentValueKey'] = null;
-        $arguments['table'] = null;
+        $this->arguments['currentValueKey'] = null;
+        $this->arguments['table']           = null;
 
-        $arguments['typoscriptObjectPath'] = 'lib.tx_viewhelpers.content';
-        $renderChildrenClosure = static function() use ($uidList) {
+        $this->arguments['typoscriptObjectPath'] = 'lib.tx_viewhelpers.content';
+        $renderChildrenClosure                   = static function() use ($uidList) {
             return implode(',', $uidList);
         };
 
         $cObjectViewHelper = GeneralUtility::makeInstance(CObjectViewHelper::class);
-        $cObjectViewHelper->setArguments($arguments);
+        $cObjectViewHelper->setArguments($this->arguments);
         $cObjectViewHelper->setRenderChildrenClosure($renderChildrenClosure);
-        $cObjectViewHelper->setRenderingContext($renderingContext);
+        $cObjectViewHelper->setRenderingContext($this->renderingContext);
 
         return $cObjectViewHelper->render();
     }

@@ -10,8 +10,6 @@ declare(strict_types=1);
 
 namespace PSBits\ViewHelpers\ViewHelpers;
 
-use Closure;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -35,15 +33,12 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class FallbackViewHelper extends AbstractViewHelper
 {
-    /**
-     * @param array<string, mixed> $arguments
-     */
-    public static function renderStatic(
-        array                     $arguments,
-        Closure                   $renderChildrenClosure,
-        RenderingContextInterface $renderingContext,
-    ): mixed {
-        foreach ($arguments['values'] as $value) {
+    public function render(): mixed
+    {
+        /** @var array<string, mixed> $values */
+        $values = $this->arguments['values'];
+
+        foreach ($values as $value) {
             if (!empty($value)) {
                 return $value;
             }

@@ -37,9 +37,9 @@
     "name": "psbits/view-helpers",
     "require": {
         "php": "^8.3",
-        "psbits/foundation": "^3.0",
-        "typo3/cms-core": "^13.4",
-        "typo3/cms-fluid": "^13.4"
+        "psbits/foundation": "^4.0",
+        "typo3/cms-core": "^13.4 || ^14.3",
+        "typo3/cms-fluid": "^13.4 || ^14.3"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.95",
