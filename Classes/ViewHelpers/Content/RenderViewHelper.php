@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -48,8 +49,7 @@ use function is_string;
 class RenderViewHelper extends AbstractViewHelper
 {
     protected $escapeChildren = false;
-
-    protected $escapeOutput = false;
+    protected $escapeOutput   = false;
 
     /**
      * Returns the rendered HTML (unescaped, no format-ViewHelper needed).
@@ -57,11 +57,42 @@ class RenderViewHelper extends AbstractViewHelper
     public function render(): string
     {
         $contentElements = $this->arguments['contentElements'] ?? $this->renderChildren();
+        $uidList         = $this->collectUids($contentElements);
+
+        /*
+         * Set keys to avoid PHP warnings in CObjectViewHelper. The table must be an empty
+         * string, not null: ContentObjectRenderer::start() breaks on a null table as soon
+         * as the frontend.cache.autoTagging feature switch is enabled.
+         */
+        $this->arguments['currentValueKey'] = null;
+        $this->arguments['table']           = '';
+
+        $this->arguments['typoscriptObjectPath'] = 'lib.tx_viewhelpers.content';
+        $renderChildrenClosure                   = static function() use ($uidList) {
+            return implode(',', $uidList);
+        };
+
+        $cObjectViewHelper = GeneralUtility::makeInstance(CObjectViewHelper::class);
+        $cObjectViewHelper->setArguments($this->arguments);
+        $cObjectViewHelper->setRenderChildrenClosure($renderChildrenClosure);
+        $cObjectViewHelper->setRenderingContext($this->renderingContext);
+
+        return $cObjectViewHelper->render();
+    }
+
+    /**
+     * Collects the uids of the given content elements.
+     *
+     * @return list<int>
+     */
+    protected function collectUids(mixed $contentElements): array
+    {
         $uidList = [];
 
         switch (true) {
             case $contentElements instanceof AbstractEntity:
                 $uidList[] = $contentElements->getUid();
+
                 break;
             case $contentElements instanceof ObjectStorage:
             case $contentElements instanceof QueryResultInterface:
@@ -94,26 +125,13 @@ class RenderViewHelper extends AbstractViewHelper
                 break;
             case is_int($contentElements):
                 $uidList[] = $contentElements;
+
                 break;
             case is_string($contentElements):
                 $uidList = GeneralUtility::intExplode(',', $contentElements, true);
         }
 
-        // Set keys to avoid PHP warnings in CObjectViewHelper.
-        $this->arguments['currentValueKey'] = null;
-        $this->arguments['table']           = null;
-
-        $this->arguments['typoscriptObjectPath'] = 'lib.tx_viewhelpers.content';
-        $renderChildrenClosure                   = static function() use ($uidList) {
-            return implode(',', $uidList);
-        };
-
-        $cObjectViewHelper = GeneralUtility::makeInstance(CObjectViewHelper::class);
-        $cObjectViewHelper->setArguments($this->arguments);
-        $cObjectViewHelper->setRenderChildrenClosure($renderChildrenClosure);
-        $cObjectViewHelper->setRenderingContext($this->renderingContext);
-
-        return $cObjectViewHelper->render();
+        return $uidList;
     }
 
     public function initializeArguments(): void

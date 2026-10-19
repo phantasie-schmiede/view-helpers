@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -39,8 +40,8 @@ class LoopViewHelper extends AbstractViewHelper
 
     public function render(): string
     {
-        $content = '';
-        $renderChildrenClosure = $this->buildRenderChildrenClosure();
+        $content                   = '';
+        $renderChildrenClosure     = $this->buildRenderChildrenClosure();
         $templateVariableContainer = $this->renderingContext->getVariableProvider();
 
         $this->backupVariables(

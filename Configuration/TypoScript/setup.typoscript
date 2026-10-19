@@ -1,5 +1,12 @@
 lib.tx_viewhelpers.content = RECORDS
 lib.tx_viewhelpers.content {
+  conf {
+    tt_content = TEXT
+    tt_content {
+      value.data = field:bodytext
+    }
+  }
+
   dontCheckPid = 1
   source.current = 1
   tables = tt_content
