@@ -138,8 +138,11 @@ TYPOSCRIPT;
          * yet, which needs a repository and a model to table mapping. Inject the results
          * directly instead; the ViewHelper only iterates over them.
          */
+        /*
+         * ReflectionProperty is always accessible since PHP 8.1, so the legacy
+         * setAccessible() call (deprecated as of PHP 8.5) is not needed here.
+         */
         $reflection = new ReflectionProperty(QueryResult::class, 'queryResult');
-        $reflection->setAccessible(true);
         $reflection->setValue($queryResult, [
             $this->entityWithUid(1),
             $this->entityWithUid(2),
