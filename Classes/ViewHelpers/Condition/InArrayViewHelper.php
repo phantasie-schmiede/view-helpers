@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -11,6 +12,7 @@ declare(strict_types=1);
 namespace PSBits\ViewHelpers\ViewHelpers\Condition;
 
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 use function in_array;
 use function is_string;
 

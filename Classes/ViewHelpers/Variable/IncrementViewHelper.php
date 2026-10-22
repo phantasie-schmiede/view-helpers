@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -40,7 +41,8 @@ class IncrementViewHelper extends AbstractViewHelper
 
         if (!is_numeric($this->arguments['step'])) {
             throw new InvalidArgumentException(
-                __CLASS__ . ': Argument "step" is not numeric (value: "' . $this->arguments['step'] . '")!', 1549455466
+                __CLASS__ . ': Argument "step" is not numeric (value: "' . $this->arguments['step'] . '")!',
+                1549455466
             );
         }
 
@@ -48,7 +50,8 @@ class IncrementViewHelper extends AbstractViewHelper
 
         if (!is_numeric($value)) {
             throw new InvalidArgumentException(
-                __CLASS__ . ': Variable "' . $this->arguments['variable'] . '" is not numeric!', 1549454962
+                __CLASS__ . ': Variable "' . $this->arguments['variable'] . '" is not numeric!',
+                1549454962
             );
         }
 

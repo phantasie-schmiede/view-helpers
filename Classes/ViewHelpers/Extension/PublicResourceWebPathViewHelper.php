@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -59,7 +60,7 @@ class PublicResourceWebPathViewHelper extends AbstractViewHelper
         $path = FilePathUtility::getPublicResourceWebPath($extensionInformation, $this->arguments['subdirectory']);
 
         if ($this->arguments['withoutLeadingSlash']) {
-            return ltrim('/', $path);
+            return ltrim($path, '/');
         }
 
         return $path;

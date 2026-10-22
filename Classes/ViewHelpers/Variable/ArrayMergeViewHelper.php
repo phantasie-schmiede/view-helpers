@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -12,6 +13,7 @@ namespace PSBits\ViewHelpers\ViewHelpers\Variable;
 
 use InvalidArgumentException;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 use function is_array;
 
 /**
@@ -35,7 +37,8 @@ class ArrayMergeViewHelper extends AbstractViewHelper
 
         if (!$this->arguments['overwrite'] && $templateVariableContainer->exists($this->arguments['as'])) {
             throw new InvalidArgumentException(
-                __CLASS__ . ': Variable "' . $this->arguments['as'] . '" already exists!', 1549520834
+                __CLASS__ . ': Variable "' . $this->arguments['as'] . '" already exists!',
+                1549520834
             );
         }
 
