@@ -12,13 +12,13 @@ declare(strict_types=1);
 namespace PSBits\ViewHelpers\Tests\Functional\ViewHelpers\Content;
 
 use PHPUnit\Framework\Attributes\Test;
+use PSBits\Qa\Testing\Support\SiteBasedTestTrait;
 use PSBits\ViewHelpers\Tests\Functional\Fixtures\Domain\TestContent;
 use PSBits\ViewHelpers\Tests\Functional\Fixtures\Domain\TestDomainObject;
 use PSBits\ViewHelpers\ViewHelpers\Content\RenderViewHelper;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionProperty;
 use RuntimeException;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\CMS\Core\Http\ServerRequest;
@@ -37,7 +37,6 @@ use TYPO3\CMS\Frontend\Page\PageParts;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 use function file_get_contents;
-use function file_put_contents;
 
 /**
  * Class RenderViewHelperTest
@@ -50,6 +49,8 @@ use function file_put_contents;
  */
 class RenderViewHelperTest extends FunctionalTestCase
 {
+    use SiteBasedTestTrait;
+
     public const int ROOT_PAGE_ID = 1;
 
     /**
@@ -71,7 +72,7 @@ TYPOSCRIPT;
     protected function setUp(): void
     {
         parent::setUp();
-        $this->writeSiteConfiguration();
+        $this->writeSiteConfiguration('view-helpers-test', $this->buildSiteConfiguration(1, '/'));
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/pages.csv');
         $this->importCSVDataSet(__DIR__ . '/../../Fixtures/tt_content.csv');
     }
@@ -247,14 +248,6 @@ TYPOSCRIPT;
         return $request
             ->withAttribute('site', $site)
             ->withAttribute('language', $site->getDefaultLanguage());
-    }
-
-    private function writeSiteConfiguration(): void
-    {
-        $path = Environment::getConfigPath() . '/sites/view-helpers-test';
-        GeneralUtility::rmdir($path, true);
-        GeneralUtility::mkdir_deep($path);
-        file_put_contents($path . '/config.yaml', "rootPageId: 1\nbase: '/'\n");
     }
 
     private function buildFrontendTypoScript(): FrontendTypoScript
